@@ -31,7 +31,7 @@ class tahoma extends eqLogic {
 		$tahomaCmd = tahomaCmd::byId($cmd->getConfiguration('infoId'));
 		if (is_object($tahomaCmd)) {
 			if ($tahomaCmd->getEqLogic()->getEqType_name() != 'tahoma') {
-				throw new Exception(__('La cible de la commande tahoma n\'est pas un équipement de type tahoma', __FILE__));
+				throw new Exception(__('La cible de la commande tahoma n’est pas un équipement de type tahoma', __FILE__));
 			}
 			if ($tahomaCmd->getSubType() != 'slider' && $virtualCmd->getSubType() != 'color') {
 				$value = $tahomaCmd->getConfiguration('value');

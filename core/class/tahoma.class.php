@@ -30,14 +30,14 @@ class tahoma extends eqLogic {
 		$value = init('value');
 		$tahomaCmd = tahomaCmd::byId($cmd->getConfiguration('infoId'));
 		if (is_object($tahomaCmd)) {
-			if ($tahomaCmd->getEqLogic()->getEqType_name() != 'tahoma') {
+			if ($tahomaCmd->getEqLogic()->getEqType_name() != __CLASS__) {
 				throw new Exception(__('La cible de la commande tahoma n’est pas un équipement de type tahoma', __FILE__));
 			}
 			if ($tahomaCmd->getSubType() != 'slider' && $virtualCmd->getSubType() != 'color') {
 				$value = $tahomaCmd->getConfiguration('value');
 			}
 		}
-		log::add('tahoma', 'debug', "Tahoma event cmdName: " . $tahomaCmd->getName() . " / value: " . $value);
+		log::add(__CLASS__, 'debug', "Tahoma event cmdName: " . $tahomaCmd->getName() . " / value: " . $value);
 	}
 
 	public static function pull($_options="") {
@@ -53,8 +53,8 @@ class tahoma extends eqLogic {
 
 	public static function deamonRunning() {
 
-		$userId = config::byKey('userId', 'tahoma');
-		$userPassword = config::byKey('userPassword', 'tahoma');
+		$userId = config::byKey('userId', __CLASS__);
+		$userPassword = config::byKey('userPassword', __CLASS__);
 
 		$modules = tahomaGetModules($userId, $userPassword);
 
@@ -63,19 +63,19 @@ class tahoma extends eqLogic {
 
 	public static function getConfigurationData($_serverId = 1) {
 
-		$userId = config::byKey('userId', 'tahoma');
-		$userPassword = config::byKey('userPassword', 'tahoma');
+		$userId = config::byKey('userId', __CLASS__);
+		$userPassword = config::byKey('userPassword', __CLASS__);
 
 		return tahomaGetConfigurationData($userId, $userPassword);
 	}
 
 	public static function syncEqLogicWithRazberry($_serverId = 1) {
-		//log::add('tahoma', 'debug', "syncEqLogicWithRazberry()");
+		//log::add(__CLASS__, 'debug', "syncEqLogicWithRazberry()");
 
-		$userId = config::byKey('userId', 'tahoma');
-		$userPassword = config::byKey('userPassword', 'tahoma');
+		$userId = config::byKey('userId', __CLASS__);
+		$userPassword = config::byKey('userPassword', __CLASS__);
 
-		$eqLogics = eqLogic::byType('tahoma');
+		$eqLogics = eqLogic::byType(__CLASS__);
 
 		$modules = tahomaGetModules($userId, $userPassword);
 
@@ -93,7 +93,7 @@ class tahoma extends eqLogic {
 
 			if (!$found) {
 				$eqLogic = new eqLogic();
-				$eqLogic->setEqType_name('tahoma');
+				$eqLogic->setEqType_name(__CLASS__);
 				$eqLogic->setIsEnable(1);
 				$eqLogic->setIsVisible(1);
 				$eqLogic->setName($module->label);
@@ -513,7 +513,7 @@ class tahoma extends eqLogic {
 
 		foreach ($eqLogics as $eqLogic) {
 			// Recherche le module 'ActionGroups'
-			log::add('tahoma', 'debug', "eqlabel: " . $eqLogic->getConfiguration('deviceURL'));
+			log::add(__CLASS__, 'debug', "eqlabel: " . $eqLogic->getConfiguration('deviceURL'));
 
 			if ($eqLogic->getConfiguration('deviceURL') == "ActionGroups") {
 				$eqLogic_found = $eqLogic;
@@ -524,7 +524,7 @@ class tahoma extends eqLogic {
 
 		if (!$found) {
 			$eqLogic = new eqLogic();
-			$eqLogic->setEqType_name('tahoma');
+			$eqLogic->setEqType_name(__CLASS__);
 			$eqLogic->setIsEnable(1);
 			$eqLogic->setIsVisible(1);
 			$eqLogic->setName("Scenarios");
@@ -585,10 +585,10 @@ class tahomaCmd extends cmd {
 	}
 
 	public function execute($_options = null) {
-		//log::add('tahoma', 'debug', "execute()");
+		//log::add(__CLASS__, 'debug', "execute()");
 
-		$userId = config::byKey('userId', 'tahoma');
-		$userPassword = config::byKey('userPassword', 'tahoma');
+		$userId = config::byKey('userId', __CLASS__);
+		$userPassword = config::byKey('userPassword', __CLASS__);
 
 		$deviceURL = $this->getConfiguration('deviceURL');
 		$commandName = $this->getConfiguration('commandName');
@@ -616,7 +616,7 @@ class tahomaCmd extends cmd {
 						$parameters = array_map('intval', explode(",", $parameters));
 						tahomaSendCommand($userId, $userPassword, $deviceURL, $commandName, $parameters, $this->getName());
 
-						$eqLogics = eqLogic::byType('tahoma');
+						$eqLogics = eqLogic::byType(__CLASS__);
 						foreach ($eqLogics as $eqLogic) {
 							if ($eqLogic->getConfiguration('deviceURL') == $deviceURL) {
 								foreach ($eqLogic->getCmd() as $command) {
@@ -639,7 +639,7 @@ class tahomaCmd extends cmd {
 						$parameters = array_map('intval', explode(",", $parameters));
 						tahomaSendCommand($userId, $userPassword, $deviceURL, $commandName, $parameters, $this->getName());
 
-						$eqLogics = eqLogic::byType('tahoma');
+						$eqLogics = eqLogic::byType(__CLASS__);
 						foreach ($eqLogics as $eqLogic) {
 							if ($eqLogic->getConfiguration('deviceURL') == $deviceURL) {
 								foreach ($eqLogic->getCmd() as $command) {
@@ -675,20 +675,20 @@ class tahomaCmd extends cmd {
 			if ($commandName == "cancelExecutions") {
 				$execId = $parameters[0];
 
-				log::add('tahoma', 'debug', "will cancelExecutions: (" . $execId . ") from tahoma.class");
+				log::add(__CLASS__, 'debug', "will cancelExecutions: (" . $execId . ") from tahoma.class");
 
 				tahomaCancelExecutions($userId, $userPassword, $execId);
 			} else {
 				$execId = tahomaSendCommand($userId, $userPassword, $deviceURL, $commandName, $parameters, $this->getName());
 
-				log::add('tahoma', 'debug', "return cancelExecutions: (" . $execId . ")");
+				log::add(__CLASS__, 'debug', "return cancelExecutions: (" . $execId . ")");
 
-				$eqLogics = eqLogic::byType('tahoma');
+				$eqLogics = eqLogic::byType(__CLASS__);
 				foreach ($eqLogics as $eqLogic) {
 					if ($eqLogic->getConfiguration('deviceURL') == $deviceURL) {
 						foreach ($eqLogic->getCmd() as $command) {
 							if ($command->getConfiguration('commandName') == "cancelExecutions") {
-								log::add('tahoma', 'debug', "set cancelExecutions: (" . $execId . ")");
+								log::add(__CLASS__, 'debug', "set cancelExecutions: (" . $execId . ")");
 
 								$command->setConfiguration('parameters', $execId);
 								$command->save();

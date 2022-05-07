@@ -24,14 +24,17 @@ try {
 		throw new Exception(__('401 - Accès non autorisé', __FILE__));
 	}
 
-	if (init('action') == 'syncEqLogicWithRazberry') {
-		tahoma::syncEqLogicWithRazberry();
-		ajax::success();
-	}
-
-	if (init('action') == 'sendConfigToDEV') {
-		log::add('tahoma', 'debug', tahoma::getConfigurationData());
-		ajax::success();
+	ajax::init();
+	$action = init('action');
+	switch($action) {
+		case 'syncEqLogicWithRazberry':
+			tahoma::syncEqLogicWithRazberry();
+			ajax::success();
+			break;
+		case 'sendConfigToDEV':
+			log::add('tahoma', 'debug', tahoma::getConfigurationData());
+			ajax::success();
+			break;
 	}
 
 	throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
@@ -39,5 +42,3 @@ try {
 } catch (Exception $e) {
 	ajax::error(displayExeption($e), $e->getCode());
 }
-
-?>

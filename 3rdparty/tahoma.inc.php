@@ -29,7 +29,7 @@ function tahomaLogon($userId, $userPassword) {
 
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);   
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 	curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
 	// curl_setopt($ch, CURLOPT_REFERER, 'https://www.tahomalink.com/enduser-mobile-web/steer-html5-client/tahoma/');
@@ -51,7 +51,6 @@ function tahomaLogon($userId, $userPassword) {
 
 	log::add('tahoma', 'debug', "new cookie - logon: ok: " . $httpcode);
 	return true;
-
 }
 
 function tahomaGetScenarios($userId, $userPassword, $decode = 1) {
@@ -78,7 +77,6 @@ function tahomaGetScenarios($userId, $userPassword, $decode = 1) {
 	$tahoma = json_decode($output);
 
 	return $tahoma;
-
 }
 
 function tahomaGetModules($userId, $userPassword, $decode = 1) {
@@ -92,7 +90,7 @@ function tahomaGetModules($userId, $userPassword, $decode = 1) {
 		CURLOPT_POST => true,
 		CURLOPT_CUSTOMREQUEST => "PUT",
 		CURLOPT_POSTFIELDS => $postData,
-    	CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
 		CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 	);
@@ -170,7 +168,7 @@ function tahomaSendCommandZ($userId, $userPassword, $deviceURL, $commandName, $p
 
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);   
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 	curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
 
@@ -185,7 +183,7 @@ function tahomaSendCommandZ($userId, $userPassword, $deviceURL, $commandName, $p
 		echo "Invalid return";
 	}
 
-	$url = "https://www.tahomalink.com/enduser-mobile-web/enduserAPI//exec/apply";
+	$url = "https://www.tahomalink.com/enduser-mobile-web/enduserAPI/exec/apply";
 
 	$action["deviceURL"] = $deviceURL;
 
@@ -217,7 +215,7 @@ function tahomaSendCommandZ($userId, $userPassword, $deviceURL, $commandName, $p
 
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);   
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 	curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
 
@@ -243,7 +241,7 @@ function tahomaSendCommand($userId, $userPassword, $deviceURL, $commandName, $pa
 
 	log::add('tahoma', 'debug', "send command " . $commandName . " to " . $deviceURL);
 
-	$url = "https://www.tahomalink.com/enduser-mobile-web/enduserAPI//exec/apply";
+	$url = "https://www.tahomalink.com/enduser-mobile-web/enduserAPI/exec/apply";
 
 	$action["deviceURL"] = $deviceURL;
 
@@ -285,7 +283,6 @@ function tahomaSendCommand($userId, $userPassword, $deviceURL, $commandName, $pa
 
 	$outputJson = json_decode($output);
 	return $outputJson->execId;
-
 }
 
 function tahomaExecCurlAndRetry($userId, $userPassword, $options) {
@@ -296,7 +293,7 @@ function tahomaExecCurlAndRetry($userId, $userPassword, $options) {
 
 	curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
 	curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 	$output = curl_exec($ch);
 	$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -317,7 +314,7 @@ function tahomaExecCurlAndRetry($userId, $userPassword, $options) {
 
 		curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
 		curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 		$output = curl_exec($ch);
 		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -336,13 +333,13 @@ function tahomaExecAction($userId, $userPassword, $oid) {
 
 	log::add('tahoma', 'debug', "exec action " . $oid);
 
- 	$now = round(microtime(true) * 1000);
+	$now = round(microtime(true) * 1000);
 	$url = sprintf("https://www.tahomalink.com/enduser-mobile-web/enduserAPI/exec/schedule/%s/%d", $oid, $now);
 
 	$options = array(
 		CURLOPT_URL => $url,
 		CURLOPT_RETURNTRANSFER => true,
-    	CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_POST => true,
 		CURLOPT_HEADER => false,
 		CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
@@ -358,5 +355,3 @@ function tahomaExecAction($userId, $userPassword, $oid) {
 	$outputJson = json_decode($output);
 	return $outputJson->actionGroup;
 }
-
-?>
